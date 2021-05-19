@@ -15,7 +15,7 @@ const qy = require('../db/connection');
 
 router.get('/', async(req, res) => {
     try {
-        const query = '';
+        let query = 'select * from categorias';
         const respuesta = await qy(query);
         const categories = respuesta.map((r) => catMapper(r));
         res.send(categories);
