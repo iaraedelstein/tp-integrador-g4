@@ -7,7 +7,7 @@ DROP TABLE IF EXISTS persona;
 
 -- PERSONA
 CREATE TABLE persona (
-  id_persona int (11) PRIMARY KEY AUTO_INCREMENT,
+  id int (11) PRIMARY KEY AUTO_INCREMENT,
   email varchar (100) NOT NULL unique,
   nombre varchar (255) NOT NULL,
   apellido varchar (255) NOT NULL,
@@ -39,7 +39,7 @@ VALUES (
 
 -- CATEGORIAS
 CREATE TABLE categoria (
-  id_categoria int (11) PRIMARY KEY AUTO_INCREMENT,
+  id int (11) PRIMARY KEY AUTO_INCREMENT,
   categoria varchar (255) NOT NULL unique
 );
 
@@ -50,13 +50,13 @@ VALUES ('AVENTURA'),
 
 -- LIBROS
 CREATE TABLE libro (
-  id_libro int (11) PRIMARY KEY AUTO_INCREMENT,
+  id int (11) PRIMARY KEY AUTO_INCREMENT,
   nombre varchar (255) NOT NULL,
   descripcion varchar (500) NOT NULL,
   id_categoria int (11) NOT NULL,
   id_persona int (11),
-  FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria),
-  FOREIGN KEY (id_persona) REFERENCES persona (id_persona)
+  FOREIGN KEY (id_categoria) REFERENCES categoria (id),
+  FOREIGN KEY (id_persona) REFERENCES persona (id)
 );
 
 INSERT INTO libro (nombre, descripcion, id_categoria, id_persona)

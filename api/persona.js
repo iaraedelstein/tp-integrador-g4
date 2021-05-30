@@ -26,29 +26,29 @@ POST '/persona' recibe: {nombre: string, apellido: string, alias: string, email:
 router.post('/', async(req, res) => {
     try {
         //valido que manden correctamente la info
-        if (!req.body.nombre) {
-            throw new Error('falta enviar el nombre');
+        if (!req.body.nombre ||
+            !req.body.apellido ||
+            !req.body.email ||
+            !req.body.alias
+        ) {
+            throw new Error('Faltan datos');
         }
-        if (!req.body.apellido) {
-            throw new Error('falta enviar el apellido');
-        }
-        if (!req.body.email) {
-            throw new Error('falta enviar el email');
-        }
-        if (!req.body.alias) {
-            throw new Error('falta enviar el alias');
-        }
+        const nombre = req.body.nombre.toUpperCase();
+        const apellido = req.body.apellido.toUpperCase();
+        const email = req.body.email.toUpperCase();
+        const alias = req.body.alias.toUpperCase();
+
         //verifico que no este en uso ese mail
-        let query = 'SELECT id FROM persona WHERE email = ?';
-
-        let respuesta = await qy(query, [req.body.email.toUpperCase()]);
-
+        let query = 'SELECT * FROM persona WHERE email = ?';
+        let respuesta = await qy(query, [email]);
         if (respuesta.length > 0) {
-            throw new Error('ese Email ya está registrado');
+            throw new Error('El email %s ya se encuentra registrado', email);
         }
         //Guardo la nueva persona
-        query = 'INSERT INTO persona VALUES (alias, apellido, email, nombre)'; //tengo muchas dudas acá, puse los datos en el orden en el que se encuentran en el archivo .sql pero en el medio está persona_id y no se si cuenta.
-        respuesta = await qy(query, [req.body.nombre.toUpperCase()]);
+        query =
+            'INSERT INTO persona(nombre,apellido,email,alias) VALUES (?, ?, ?, ?)';
+
+        respuesta = await qy(query, [nombre, apellido, email, alias]);
         res.send(200, { respuesta });
     } catch (e) {
         console.error(e.message);
@@ -87,11 +87,10 @@ router.get('/:id', async(req, res) => {
     try {
         const query = 'SELECT * FROM persona WHERE id = ?';
 
-        const respuesta = await qy(query);
+        const respuesta = await qy(query, [req.params.id]);
         if (respuesta.length <= 0) {
             throw new Error('No se encuentra esa persona');
         }
-
         res.send({ respuesta });
     } catch (e) {
         console.error(e.message);
@@ -111,16 +110,18 @@ retorna status 200 y el objeto modificado o bien status 413,
 /*
 DELETE '/persona/:id' retorna: 200 y 
 {mensaje: "se borro correctamente"} 
-o bien 413, {mensaje: <descripcion del error>} "error inesperado", "no existe esa persona", 
+o bien 413, {mensaje: <descripcion del error>} 
+"error inesperado", 
+"no existe esa persona", 
 "esa persona tiene libros asociados, no se puede eliminar"
 */
 router.delete('/:id', async(req, res) => {
     try {
         const query = 'DELETE FROM persona WHERE id = ?';
 
-        const respuesta = await qy(query);
+        const respuesta = await qy(query, [req.params.id]);
         if (respuesta.length <= 0) {
-            throw new Error('esa persona no está registrada');
+            throw new Error('No existe esa persona');
         }
 
         res.send({ mensaje: 'Se borró correctamente' });
