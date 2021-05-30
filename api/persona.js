@@ -15,7 +15,7 @@ const qy = require('../db/connection');
  */
 
 //POST
-app.post('/', async(req, res) => {
+router.post('/', async(req, res) => {
     try {
         //valido que manden correctamente la info
         if (!req.body.nombre) {
@@ -41,7 +41,7 @@ app.post('/', async(req, res) => {
         //Guardo la nueva persona
         query = 'INSERT INTO persona VALUES (alias, apellido, email, nombre)'; //tengo muchas dudas acá, puse los datos en el orden en el que se encuentran en el archivo .sql pero en el medio está persona_id y no se si cuenta.
         respuesta = await qy(query, [req.body.nombre.toUpperCase()]);
-        res.send(200, { respuesta: respuesta });
+        res.send(200, { respuesta });
     } catch (e) {
         console.error(e.message);
         res.status(413).send({ Error: e.message });
@@ -49,7 +49,7 @@ app.post('/', async(req, res) => {
 });
 
 //GET
-app.get('/', async(req, res) => {
+router.get('/', async(req, res) => {
     try {
         const query = 'SELECT * FROM persona';
 
@@ -57,14 +57,15 @@ app.get('/', async(req, res) => {
         if (respuesta.length <= 0) {
             throw new Error('esa persona no está registrada');
         }
-        res.send({ respuesta: respuesta });
+        res.send({ personas: respuesta });
     } catch (e) {
         console.error(e.message);
         res.status(413).send({ Error: e.message });
     }
 });
-//GET ID
-app.get('/persona/:id', async(req, res) => {
+
+//GET BY ID
+router.get('/:id', async(req, res) => {
     try {
         const query = 'SELECT * FROM persona WHERE id = ?';
 
@@ -73,11 +74,15 @@ app.get('/persona/:id', async(req, res) => {
             throw new Error('esa persona no está registrada');
         }
 
-        res.send({ respuesta: respuesta });
+        res.send({ respuesta });
     } catch (e) {
         console.error(e.message);
         res.status(413).send({ Error: e.message });
     }
 });
+
+//put
+
+//delete
 
 module.exports = router;

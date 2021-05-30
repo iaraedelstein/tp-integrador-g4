@@ -1,105 +1,113 @@
+-- CREATE
 CREATE DATABASE IF NOT EXISTS bookshare_db;
-
 USE bookshare_db;
-DROP TABLE IF EXISTS libros;
-DROP TABLE IF EXISTS categorias;
-DROP TABLE IF EXISTS personas;
+DROP TABLE IF EXISTS libro;
+DROP TABLE IF EXISTS categoria;
+DROP TABLE IF EXISTS persona;
 
-/*
-De la persona a prestar los libros el nombre, apellido, email y alias. El email debe ser unico. 
-Todos los datos son requeridos.
-*/
-
-CREATE TABLE personas (
-id_persona int (11) AUTO_INCREMENT,
-email varchar (100) ,
-nombre varchar (100) NOT NULL,
-apellido varchar (100) NOT NULL,
-alias varchar (100) NOT NULL,
-PRIMARY KEY (id_persona),
-unique (email),
-CONSTRAINT CHK_nombre CHECK (length(trim(nombre))>0),
-CONSTRAINT CHK_apellido CHECK (length(trim(apellido))>0),
-CONSTRAINT CHK_alias CHECK (length(trim(alias))>0)
-);
-DROP TRIGGER IF exists TRG_personas;
-
-DELIMITER $$
-CREATE TRIGGER TRG_personas_ins
-BEFORE INSERT ON personas
-FOR EACH ROW
-BEGIN
-  IF length(trim(NEW.nombre))=0
-    THEN
-      SET NEW.nombre = NULL;
-  ELSEIF length(trim(NEW.apellido))=0
-    THEN
-      SET NEW.apellido = NULL;
-   ELSEIF length(trim(NEW.alias))=0
-    THEN
-      SET NEW.alias = NULL;
-  END IF;
-END;
-CREATE TRIGGER TRG_personas_upd
-BEFORE UPDATE ON personas
-FOR EACH ROW
-BEGIN
-  IF length(trim(NEW.nombre))=0
-    THEN
-      SET NEW.nombre = NULL;
-  ELSEIF length(trim(NEW.apellido))=0
-    THEN
-      SET NEW.apellido = NULL;
-   ELSEIF length(trim(NEW.alias))=0
-    THEN
-      SET NEW.alias = NULL;
-  END IF;
-END$$
-DELIMITER ;	
-	   
-INSERT INTO personas (email ,nombre ,apellido ,alias) VALUES 
-('mauroslopez@gmail.com','MAURO', 'LOPEZ', 'malop'),
-('benicio@gmail.com','Benicio', 'Laudo', 'bencho'),
-('ivan@gmail.com','Iván', 'Pérez', 'ivi')
-;
-
-/*
-De los generos de los libros, solo los nombres, el campo nunca puede ser vacio o nulo 
-y no pueden repetirse las categorias.
-*/
-
-
-CREATE TABLE categorias (
-categoria varchar (100) ,
-PRIMARY KEY (categoria)
+-- PERSONA
+CREATE TABLE persona (
+  id_persona int (11) PRIMARY KEY AUTO_INCREMENT,
+  email varchar (100) NOT NULL unique,
+  nombre varchar (255) NOT NULL,
+  apellido varchar (255) NOT NULL,
+  alias varchar (100) NOT NULL,
+  CONSTRAINT CHK_nombre CHECK (length(trim(nombre)) > 0),
+  CONSTRAINT CHK_apellido CHECK (length(trim(apellido)) > 0),
+  CONSTRAINT CHK_alias CHECK (length(trim(alias)) > 0)
 );
 
-INSERT INTO categorias (categoria) VALUES 
-('Historia'),
-('Novela'), 
-('Cuentos'), 
-('Ciencia ficción'),
-('Relato')
-;
-/*
-De los libros, el nombre, una descripcion, su categoria y la persona a la cual se le ha prestado el libro. 
-Para representar que un libro se encuentra en la biblioteca se puede utilizar cualquiera de las siguientes 
-estrategias: null para libros en la biblioteca en el campo de persona_id, que el usuario se encuentre ingresado 
-como una persona mas.
-*/
+INSERT INTO persona (email, nombre, apellido, alias)
+VALUES (
+    'MAURO.LOPEZ@GMAIL.COM',
+    'MAURO',
+    'LOPEZ',
+    'MAURO.LOPEZ'
+  ),
+  (
+    'BENICIO.LAUDO@GMAIL.COM',
+    'BENICIO',
+    'LAUDO',
+    'BENICIO.LAUDO'
+  ),
+  (
+    'IVAN.PEREZ@GMAIL.COM',
+    'IVAN',
+    'PEREZ',
+    'IVAN.PEREZ'
+  );
 
-CREATE TABLE libros (
-nombre varchar (100) ,
-descripcion varchar (500) ,
-categoria varchar (100) NOT NULL,
-id_persona int (12),
-PRIMARY KEY (nombre),
-FOREIGN KEY (categoria) REFERENCES categorias (categoria),
-FOREIGN KEY (id_persona) REFERENCES personas (id_persona)
+-- CATEGORIAS
+CREATE TABLE categoria (
+  id_categoria int (11) PRIMARY KEY AUTO_INCREMENT,
+  categoria varchar (255) NOT NULL unique
 );
 
-INSERT INTO libros (nombre, descripcion, categoria,id_persona ) VALUES 
-('El guardián entre el centeno','Una novela de viaje iniciático', 'Novela', '1'),
-('Ficciones','Cuentos laberínticos', 'Cuentos', '2'),
-('Crónicas marcianas','Transcurre en el momento en que la tierra conquista Merte', 'Ciencia ficción', NULL)
-;
+INSERT INTO categoria (categoria)
+VALUES ('AVENTURA'),
+  ('POLICIAL'),
+  ('CIENCIA FICCION');
+
+-- LIBROS
+CREATE TABLE libro (
+  id_libro int (11) PRIMARY KEY AUTO_INCREMENT,
+  nombre varchar (255) NOT NULL,
+  descripcion varchar (500) NOT NULL,
+  id_categoria int (11) NOT NULL,
+  id_persona int (11),
+  FOREIGN KEY (id_categoria) REFERENCES categoria (id_categoria),
+  FOREIGN KEY (id_persona) REFERENCES persona (id_persona)
+);
+
+INSERT INTO libro (nombre, descripcion, id_categoria, id_persona)
+VALUES (
+    'LOS TRES MOSQUETEROS',
+    'NOVELA DEL ESCRITOR ALEJANDRO DUMAS',
+    1,
+    1
+  ),
+  ('ESTUDIO EN ESCARLATA',
+   'NOVELA DE MISTERIO ESCRITA POR ARCHUR CONAN DOYLE', 2, 2),
+  (
+    'CRÓNICAS MARCIANAS',
+    'LIBRO DE RAY BRADBURY. NARRA LA LLEGADA A MARTE Y LA COLONIZACIÓN DEL PLANETA',
+    3,
+    NULL
+  );
+
+/*
+-- DROP TRIGGER IF exists TRG_personas;
+ DELIMITER $$
+ CREATE TRIGGER TRG_personas_ins
+ BEFORE INSERT ON persona
+ FOR EACH ROW
+ BEGIN
+ IF length(trim(NEW.nombre))=0
+ THEN
+ SET NEW.nombre = "sin_nombre";
+ ELSEIF length(trim(NEW.apellido))=0
+ THEN
+ SET NEW.apellido = "sin_apellido";
+ ELSEIF length(trim(NEW.alias))=0
+ THEN
+ SET NEW.alias = "sin_alias";
+ END IF;
+ END;
+ 
+ CREATE TRIGGER TRG_personas_upd
+ BEFORE UPDATE ON persona
+ FOR EACH ROW
+ BEGIN
+ IF length(trim(NEW.nombre))=0
+ THEN
+ SET NEW.nombre = "sin_nombre";
+ ELSEIF length(trim(NEW.apellido))=0
+ THEN
+ SET NEW.apellido = "sin_apellido";
+ ELSEIF length(trim(NEW.alias))=0
+ THEN
+ SET NEW.alias = "sin_alias";
+ END IF;
+ END$$
+ DELIMITER ;	
+ */
