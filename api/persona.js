@@ -15,6 +15,14 @@ const qy = require('../db/connection');
  */
 
 //POST
+/*
+POST '/persona' recibe: {nombre: string, apellido: string, alias: string, email: string} retorna: 
+- status: 200, {id: numerico, nombre: string, apellido: string, alias: string, email: string} 
+- status: 413, {mensaje: <descripcion del error>} que puede ser: 
+"faltan datos", 
+"el email ya se encuentra registrado", 
+"error inesperado"
+*/
 router.post('/', async(req, res) => {
     try {
         //valido que manden correctamente la info
@@ -44,45 +52,82 @@ router.post('/', async(req, res) => {
         res.send(200, { respuesta });
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ Error: e.message });
+        res.status(413).send({ mensaje: e.message });
     }
 });
 
 //GET
+/*
+GET '/persona' retorna 
+- status 200 y [{id: numerico, nombre: string, apellido: string, alias: string, email; string}] 
+- status 413 y []
+*/
 router.get('/', async(req, res) => {
     try {
         const query = 'SELECT * FROM persona';
 
         const respuesta = await qy(query);
         if (respuesta.length <= 0) {
-            throw new Error('esa persona no está registrada');
+            throw new Error('Error');
         }
         res.send({ personas: respuesta });
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ Error: e.message });
+        res.status(413).send([]);
     }
 });
 
 //GET BY ID
+/*
+GET '/persona/:id' retorna 
+- status 200 y {id: numerico, nombre: string, apellido: string, alias: string, email; string} 
+- status 413 , {mensaje: <descripcion del error>} "error inesperado", "no se encuentra esa persona"
+*/
 router.get('/:id', async(req, res) => {
     try {
         const query = 'SELECT * FROM persona WHERE id = ?';
 
         const respuesta = await qy(query);
         if (respuesta.length <= 0) {
-            throw new Error('esa persona no está registrada');
+            throw new Error('No se encuentra esa persona');
         }
 
         res.send({ respuesta });
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ Error: e.message });
+        res.status(413).send({ mensaje: e.message });
     }
 });
 
 //put
+/*
+PUT '/persona/:id' recibe: {nombre: string, apellido: string, alias: string, email: string} 
+el email no se puede modificar. 
+retorna status 200 y el objeto modificado o bien status 413, 
+{mensaje: <descripcion del error>} "error inesperado", "no se encuentra esa persona"
+*/
 
-//delete
+//DELETE
+/*
+DELETE '/persona/:id' retorna: 200 y 
+{mensaje: "se borro correctamente"} 
+o bien 413, {mensaje: <descripcion del error>} "error inesperado", "no existe esa persona", 
+"esa persona tiene libros asociados, no se puede eliminar"
+*/
+router.delete('/:id', async(req, res) => {
+    try {
+        const query = 'DELETE FROM persona WHERE id = ?';
+
+        const respuesta = await qy(query);
+        if (respuesta.length <= 0) {
+            throw new Error('esa persona no está registrada');
+        }
+
+        res.send({ mensaje: 'Se borró correctamente' });
+    } catch (e) {
+        console.error(e.message);
+        res.status(413).send({ mensaje: e.message });
+    }
+});
 
 module.exports = router;
