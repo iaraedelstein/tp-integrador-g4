@@ -3,15 +3,17 @@ const router = express.Router();
 const qy = require('../db/connection');
 
 /**
- * Persona
+ * Libro
  *
- * POST     /persona
- * GET      /persona
- * GET      /persona/:id
- * PUT      /persona/:id
- * DELETE   /persona/:id
+ * POST     /libro
+ * GET      /libro
+ * GET      /libro/:id
+ * PUT      /libro/:id
+ * PUT      /libro/prestar/:id
+ * PUT      /libro/devolver/:id
+ * DELETE   /libro/:id
  *
- * Path -> /persona
+ * Path -> /libro
  */
 
 module.exports = router;
