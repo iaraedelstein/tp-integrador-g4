@@ -21,8 +21,9 @@ POST '/categoria' recibe: {nombre: string} retorna:
 router.post('/', async(req, res) => {
     try {
         //valido que manden correctamente la info
-        if (!req.body.nombre) {
-            throw new Error('Faltan datos');
+        if (!req.body.nombre || req.body.nombre === '') {
+            res.status(413).send({ mensaje: 'Faltan datos' });
+            return;
         }
         const nombre = req.body.nombre.toUpperCase();
 
@@ -30,7 +31,9 @@ router.post('/', async(req, res) => {
         let query = 'SELECT * FROM categoria WHERE nombre = ?';
         let respuesta = await qy(query, [nombre]);
         if (respuesta.length > 0) {
-            res.status(413).send('Ese nombre de categoria ' + nombre + ' ya existe.');
+            res
+                .status(413)
+                .send({ mensaje: 'Ese nombre de categoria ' + nombre + ' ya existe.' });
         }
         //Guardo la nueva categoria
         query = 'INSERT INTO categoria(nombre) VALUES (?)';
@@ -54,7 +57,8 @@ GET '/categoria' retorna:
 */
 router.get('/', async(req, res) => {
     try {
-        let query = 'select * from categoria';
+        const query = 'select * from categoria';
+        const respuesta = await qy(query);
         if (respuesta.length <= 0) {
             throw new Error('Error');
         }
@@ -77,6 +81,7 @@ router.get('/:id', async(req, res) => {
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.length <= 0) {
             res.status(413).send({ mensaje: 'categoria no encontrada' });
+            return;
         }
         res.status(200).send(respuesta[0]);
     } catch (e) {
@@ -96,16 +101,18 @@ router.delete('/:id', async(req, res) => {
         const queryGet = 'SELECT * FROM categoria WHERE id = ?';
         const respuestaGet = await qy(queryGet, [req.params.id]);
         if (respuestaGet.length <= 0) {
-            res.status(413).send('No existe la categoria indicada');
+            res.status(413).send({ mensaje: 'No existe la categoria indicada' });
+            return;
         }
 
         //valido si existe la categoria
         const queryGetLibros = 'SELECT * FROM libro WHERE id_categoria = ?';
         const responseGetLibros = await qy(queryGetLibros, [req.params.id]);
         if (responseGetLibros.length > 0) {
-            res
-                .status(413)
-                .send('Categoria con libros asociados, no se puede eliminar');
+            res.status(413).send({
+                mensaje: 'Categoria con libros asociados, no se puede eliminar',
+            });
+            return;
         }
 
         const query = 'DELETE FROM categoria WHERE id = ?';

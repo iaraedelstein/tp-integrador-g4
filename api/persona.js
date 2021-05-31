@@ -27,11 +27,15 @@ router.post('/', async(req, res) => {
     try {
         //valido que manden correctamente la info
         if (!req.body.nombre ||
+            req.body.nombre === '' ||
             !req.body.apellido ||
+            req.body.apellido === '' ||
             !req.body.email ||
-            !req.body.alias
+            req.body.email === '' ||
+            !req.body.alias ||
+            req.body.alias === ''
         ) {
-            res.status(413).send('Faltan datos');
+            res.status(413).send({ mensaje: 'Faltan datos' });
         }
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
@@ -42,9 +46,10 @@ router.post('/', async(req, res) => {
         let query = 'SELECT * FROM persona WHERE email = ?';
         let respuesta = await qy(query, [email]);
         if (respuesta.length > 0) {
-            res
-                .status(413)
-                .send('El email ' + email + ' ya se encuentra registrado ');
+            res.status(413).send({
+                mensaje: 'El email ' + email + ' ya se encuentra registrado ',
+            });
+            return;
         }
         //Guardo la nueva persona
         query =
@@ -99,6 +104,7 @@ router.get('/:id', async(req, res) => {
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.length <= 0) {
             res.status(413).send({ mensaje: 'No se encuentra esa persona' });
+            return;
         }
         res.status(200).send(respuesta[0]);
     } catch (e) {
@@ -118,9 +124,13 @@ router.put('/:id', async(req, res) => {
     try {
         //valido que manden correctamente la info
         if (!req.body.nombre ||
+            req.body.nombre === '' ||
             !req.body.apellido ||
+            req.body.apellido === '' ||
             !req.body.email ||
-            !req.body.alias
+            req.body.email === '' ||
+            !req.body.alias ||
+            req.body.alias === ''
         ) {
             throw new Error('Faltan datos');
         }
@@ -133,7 +143,8 @@ router.put('/:id', async(req, res) => {
         const queryGet = 'SELECT * FROM persona WHERE id = ?';
         const respuestaGet = await qy(queryGet, [req.params.id]);
         if (respuestaGet.length <= 0) {
-            res.status(413).send('No se encuentra esa persona');
+            res.status(413).send({ mensaje: 'No se encuentra esa persona' });
+            return;
         }
 
         //Guardo la nueva persona sin el email así no se modifica
@@ -169,13 +180,15 @@ router.delete('/:id', async(req, res) => {
         const queryGet = 'SELECT * FROM persona WHERE id = ?';
         const respuestaGet = await qy(queryGet, [req.params.id]);
         if (respuestaGet.length <= 0) {
-            res.status(413).send('No existe esa persona');
+            res.status(413).send({ mensaje: 'No existe esa persona' });
+            return;
         }
 
         const query = 'DELETE FROM persona WHERE id = ?';
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.affectedRows == 1) {
             res.status(200).send({ mensaje: 'Se borró correctamente' });
+            return;
         } else {
             throw new Error('Error inesperado');
         }
