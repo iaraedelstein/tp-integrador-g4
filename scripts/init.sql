@@ -40,10 +40,10 @@ VALUES (
 -- CATEGORIAS
 CREATE TABLE categoria (
   id int (11) PRIMARY KEY AUTO_INCREMENT,
-  categoria varchar (255) NOT NULL unique
+  nombre varchar (255) NOT NULL unique
 );
 
-INSERT INTO categoria (categoria)
+INSERT INTO categoria (nombre)
 VALUES ('AVENTURA'),
   ('POLICIAL'),
   ('CIENCIA FICCION');

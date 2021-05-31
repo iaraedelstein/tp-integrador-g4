@@ -31,7 +31,7 @@ router.post('/', async(req, res) => {
             !req.body.email ||
             !req.body.alias
         ) {
-            throw new Error('Faltan datos');
+            res.status(413).send('Faltan datos');
         }
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
@@ -42,7 +42,9 @@ router.post('/', async(req, res) => {
         let query = 'SELECT * FROM persona WHERE email = ?';
         let respuesta = await qy(query, [email]);
         if (respuesta.length > 0) {
-            throw new Error('El email ' + email + ' ya se encuentra registrado ');
+            res
+                .status(413)
+                .send('El email ' + email + ' ya se encuentra registrado ');
         }
         //Guardo la nueva persona
         query =
@@ -59,7 +61,7 @@ router.post('/', async(req, res) => {
         res.status(200).send(persona);
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ mensaje: e.message });
+        res.status(413).send({ mensaje: 'Error inesperado' });
     }
 });
 
@@ -96,12 +98,12 @@ router.get('/:id', async(req, res) => {
 
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.length <= 0) {
-            throw new Error('No se encuentra esa persona');
+            res.status(413).send({ mensaje: 'No se encuentra esa persona' });
         }
         res.status(200).send(respuesta[0]);
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ mensaje: e.message });
+        res.status(413).send({ mensaje: 'Error inesperado' });
     }
 });
 
@@ -131,7 +133,7 @@ router.put('/:id', async(req, res) => {
         const queryGet = 'SELECT * FROM persona WHERE id = ?';
         const respuestaGet = await qy(queryGet, [req.params.id]);
         if (respuestaGet.length <= 0) {
-            throw new Error('No existe esa persona');
+            res.status(413).send('No se encuentra esa persona');
         }
 
         //Guardo la nueva persona sin el email así no se modifica
@@ -148,7 +150,7 @@ router.put('/:id', async(req, res) => {
         res.status(200).send(person);
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ mensaje: e.message });
+        res.status(413).send({ mensaje: 'Error inesperado' });
     }
 });
 
@@ -167,7 +169,7 @@ router.delete('/:id', async(req, res) => {
         const queryGet = 'SELECT * FROM persona WHERE id = ?';
         const respuestaGet = await qy(queryGet, [req.params.id]);
         if (respuestaGet.length <= 0) {
-            throw new Error('No existe esa persona');
+            res.status(413).send('No existe esa persona');
         }
 
         const query = 'DELETE FROM persona WHERE id = ?';
@@ -179,7 +181,7 @@ router.delete('/:id', async(req, res) => {
         }
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ mensaje: e.message });
+        res.status(413).send({ mensaje: 'Error inesperado' });
     }
 });
 
