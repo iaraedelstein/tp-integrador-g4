@@ -12,7 +12,7 @@ const conn = mysql.createConnection({
 
 conn.connect((error) => {
     if (error) throw error;
-    console.log('Se estableción la conexión con la DB');
+    console.log('Se estableció la conexión con la DB');
 });
 
 // Permite el uso de async await para un código más ordenado al generar queries
