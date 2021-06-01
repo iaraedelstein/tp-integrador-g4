@@ -132,7 +132,8 @@ router.put('/:id', async(req, res) => {
             !req.body.alias ||
             req.body.alias === ''
         ) {
-            throw new Error('Faltan datos');
+            res.status(413).send({ mensaje: 'Faltan datos' });
+            return;
         }
         const nombre = req.body.nombre.toUpperCase();
         const apellido = req.body.apellido.toUpperCase();
