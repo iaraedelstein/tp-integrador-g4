@@ -47,7 +47,7 @@ router.post('/', async(req, res) => {
         let respuesta = await qy(query, [email]);
         if (respuesta.length > 0) {
             res.status(413).send({
-                mensaje: 'El email ' + email + ' ya se encuentra registrado ',
+                mensaje: 'El email: ' + email + ' ya se encuentra registrado ',
             });
             return;
         }
@@ -185,6 +185,16 @@ router.delete('/:id', async(req, res) => {
             return;
         }
 
+        ///Falta agregar la validacion de que no se pueda eliminar si tiene libros asociados. 
+
+        const queryLibroId = 'SELECT * FROM libro WHERE id_persona = ?';
+        const respuestaLibroId = await qy(queryLibroId, [req.params.id]);
+        if (respuestaLibroId > 0) {
+            res.status(413).send({ mensaje: 'Esa persona tiene libros asociados, no se puede eliminar' });
+            return;
+        }
+
+        //borro la persona
         const query = 'DELETE FROM persona WHERE id = ?';
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.affectedRows == 1) {
