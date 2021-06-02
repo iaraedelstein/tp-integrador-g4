@@ -23,14 +23,34 @@ router.post('/', async(req, res) => {
         const nombre = req.body.nombre.toUpperCase();
         const descripcion = req.body.descripcion.toUpperCase();
         const id_categoria = req.body.id_categoria;
-        const id_persona = req.body.persona_id;
+        const id_persona = req.body.id_persona;
 
         //verifico que no este ingresado ese libro
         let query = 'SELECT * FROM libro WHERE nombre = ?';
         let respuesta = await qy(query, [nombre]);
         if (respuesta.length > 0) {
             res.status(413).send({
-                mensaje: 'El libro ' + nombre + ' ya se encuentra ingresado',
+                mensaje: 'El libro: ' + nombre + ' ya se encuentra ingresado',
+            });
+            return;
+        }
+
+        // validar que exista la categoria indicada.
+        let queryCat = 'SELECT * FROM categoria WHERE id = ?';
+        let respuestaCat = await qy(queryCat, [id_categoria]);
+        if (respuestaCat.length <= 0) {
+            res.status(413).send({
+                mensaje: 'La categoria: ' + id_categoria + ' no existe.'
+            });
+            return;
+        }
+
+        // validar que exista la persona indicada.
+        let queryPersona = 'SELECT * FROM persona WHERE id = ?';
+        let respuestaPersona = await qy(queryPersona, [id_persona]);
+        if (respuestaPersona.length <= 0) {
+            res.status(413).send({
+                mensaje: 'La persona: ' + id_persona + ' no existe.'
             });
             return;
         }

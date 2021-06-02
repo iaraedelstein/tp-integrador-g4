@@ -27,13 +27,13 @@ router.post('/', async(req, res) => {
         }
         const nombre = req.body.nombre.toUpperCase();
 
-        //verifico que no este el nombre
+        //verifico que no se repita la categoria
         let query = 'SELECT * FROM categoria WHERE nombre = ?';
         let respuesta = await qy(query, [nombre]);
         if (respuesta.length > 0) {
             res
                 .status(413)
-                .send({ mensaje: 'Ese nombre de categoria ' + nombre + ' ya existe.' });
+                .send({ mensaje: 'Ese nombre de categoria: ' + nombre + ' ya existe.' });
         }
         //Guardo la nueva categoria
         query = 'INSERT INTO categoria(nombre) VALUES (?)';
@@ -57,7 +57,7 @@ GET '/categoria' retorna:
 */
 router.get('/', async(req, res) => {
     try {
-        const query = 'select * from categoria';
+        const query = 'SELECT * FROM categoria';
         const respuesta = await qy(query);
         if (respuesta.length <= 0) {
             throw new Error('Error');
@@ -105,7 +105,7 @@ router.delete('/:id', async(req, res) => {
             return;
         }
 
-        //valido si existe la categoria
+        //Valido si hay libros asociados a la categoria
         const queryGetLibros = 'SELECT * FROM libro WHERE id_categoria = ?';
         const responseGetLibros = await qy(queryGetLibros, [req.params.id]);
         if (responseGetLibros.length > 0) {
@@ -115,6 +115,7 @@ router.delete('/:id', async(req, res) => {
             return;
         }
 
+        //Elimino la categoria seleccionada
         const query = 'DELETE FROM categoria WHERE id = ?';
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.affectedRows == 1) {
