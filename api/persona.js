@@ -185,12 +185,15 @@ router.delete('/:id', async(req, res) => {
             return;
         }
 
-        ///Falta agregar la validacion de que no se pueda eliminar si tiene libros asociados. 
-
+        ///Valido libros asociados
         const queryLibroId = 'SELECT * FROM libro WHERE id_persona = ?';
         const respuestaLibroId = await qy(queryLibroId, [req.params.id]);
         if (respuestaLibroId > 0) {
-            res.status(413).send({ mensaje: 'Esa persona tiene libros asociados, no se puede eliminar' });
+            res
+                .status(413)
+                .send({
+                    mensaje: 'Esa persona tiene libros asociados, no se puede eliminar',
+                });
             return;
         }
 

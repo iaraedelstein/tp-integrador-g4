@@ -259,7 +259,6 @@ router.put('/devolver/:id', async(req, res) => {
         }
 
         const id = req.params.id;
-        const persona_id = req.body.persona_id;
 
         //valido si existe el libro
         const queryLibroId = 'SELECT * FROM libro WHERE id = ?';
@@ -270,7 +269,7 @@ router.put('/devolver/:id', async(req, res) => {
         }
         // valido si se encuentra prestado
         const libro = respuestaLibro[0];
-        if (!libro.persona_id || libro.persona_id === null) {
+        if (libro.persona_id == null) {
             res.status(413).send({
                 mensaje: 'Ese libro no estaba prestado!',
             });
@@ -279,7 +278,7 @@ router.put('/devolver/:id', async(req, res) => {
 
         //realizo la modificación del registro
         const query = 'UPDATE libro SET persona_id = null WHERE id = ?';
-        await qy(query, [persona_id, id]);
+        await qy(query, [id]);
         res.status(200).send({ mensaje: 'se realizo la devolucion correctamente' });
     } catch (e) {
         console.error(e.message);
