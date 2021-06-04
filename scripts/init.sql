@@ -53,13 +53,13 @@ CREATE TABLE libro (
   id int (11) PRIMARY KEY AUTO_INCREMENT,
   nombre varchar (255) NOT NULL,
   descripcion varchar (500) NOT NULL,
-  id_categoria int (11) NOT NULL,
-  id_persona int (11),
-  FOREIGN KEY (id_categoria) REFERENCES categoria (id),
-  FOREIGN KEY (id_persona) REFERENCES persona (id)
+  categoria_id int (11) NOT NULL,
+  persona_id int (11),
+  FOREIGN KEY (categoria_id) REFERENCES categoria (id),
+  FOREIGN KEY (persona_id) REFERENCES persona (id)
 );
 
-INSERT INTO libro (nombre, descripcion, id_categoria, id_persona)
+INSERT INTO libro (nombre, descripcion, categoria_id, persona_id)
 VALUES (
     'LOS TRES MOSQUETEROS',
     'NOVELA DEL ESCRITOR ALEJANDRO DUMAS',
