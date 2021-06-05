@@ -79,6 +79,7 @@ router.get('/:id', async(req, res) => {
         const query = 'SELECT * FROM categoria WHERE id = ?';
 
         const respuesta = await qy(query, [req.params.id]);
+        //valido si existe la categoria.
         if (respuesta.length <= 0) {
             res.status(413).send({ mensaje: 'categoria no encontrada' });
             return;
@@ -106,7 +107,7 @@ router.delete('/:id', async(req, res) => {
         }
 
         //Valido si hay libros asociados a la categoria
-        const queryGetLibros = 'SELECT * FROM libro WHERE id_categoria = ?';
+        const queryGetLibros = 'SELECT * FROM libro WHERE categoria_id = ?';
         const responseGetLibros = await qy(queryGetLibros, [req.params.id]);
         if (responseGetLibros.length > 0) {
             res.status(413).send({
@@ -120,6 +121,7 @@ router.delete('/:id', async(req, res) => {
         const respuesta = await qy(query, [req.params.id]);
         if (respuesta.affectedRows == 1) {
             res.status(200).send({ mensaje: 'Se borró correctamente' });
+
         } else {
             throw new Error('Error inesperado');
         }

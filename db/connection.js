@@ -5,10 +5,11 @@ const util = require('util');
 const conn = mysql.createConnection({
     host: 'localhost',
     port: 3306,
-    user: 'testUser',
-    password: '1234',
+    user: 'root',
+    password: '',
     database: 'bookshare_db',
 });
+
 
 conn.connect((error) => {
     if (error) throw error;

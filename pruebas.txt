@@ -1,0 +1,157 @@
+PRUEBAS NO EXITOSAS
+
+GET CATEGORIA.
+GET PERSONA
+GET LIBRO
+        Manejo de errores.
+--------    Tabla vacia => captura el error en el catch, no lo captura en if-throw new Error.
+
+POST LIBRO
+        Manejo de errores.
+--------    Persona Inexistente => no toma null como valido al momento de ingresar los datos por JSON. No puedo llegar al error de persona Inexistente
+
+GET LIBRO x id
+        Manejo de errores.
+--------    Falta Datos => No se como validar que si no se envia el id en la consulta, porque si lo dejo vacio, lo toma como una consulta de todos los libros. 
+
+DELETE LIBRO X ID
+        Manejo de errores.
+--------    Faltan datos => No puedo verificarlo, me tira error: 
+            Cannot DELETE /libro
+
+
+Categoria
+    POST CATEGORIA.
+        Manejo de errores:
+            Faltan datos => ok
+            Nombre vacio => ok
+            Categoria Repetida => ok
+        
+        Carga de Datos:
+            Carga de datos => ok. (no genero los id 4 y 7, genero 5, 6, 8 y 9)
+
+    GET CATEGORIA.
+        Manejo de errores.
+--------    Tabla vacia => captura el error en el catch, no lo captura en if-throw new Error.
+        Obtener Datos.
+            Obtener datos => ok
+
+    GET CATEGORIA ID
+        Manejo de errores.
+            Categoria Inexistente => ok
+        
+        Obtener Datos.
+            Obtener datos x id => ok
+
+    DELETE CATEGORIA
+        Manejo de errores.
+            Categoria Inexistente => ok
+            Categoria con Libros asociados => ok
+
+        Borrar datos.
+            Borrar Categoria => ok        
+
+
+Persona
+    POST PERSONA
+        Manejo de errores.
+            Falta datos => ok
+            Mail Repetido => ok
+
+        Carga de Datos:
+            Carga de datos => ok
+    
+    GET PERSONA
+        Manejo de errores.
+--------    Tabla vacia => captura el error en el catch, no lo captura en if-throw new Error.
+        Obtener Datos.
+            Obtener datos => ok 
+
+    GET PERSONA x id
+        Manejo de errores.
+            Persona Inexistente => ok
+
+        Obtener Datos.
+            Obtener datos => ok 
+
+    PUT PERSONA X ID 
+        Manejo de errores.
+            Faltan datos => ok
+            Persona Inexistente => ok
+
+            Carga de Datos:
+            Modificacion de datos => ok
+            En este caso, si intentamos modificar el email, no lo modifica porque debia ser unico.
+
+    DELETE PERSONA X ID
+        Manejo de errores.
+            Persona Inexistente => ok
+            Persona con Libros asociados => ok
+
+        Borrar datos.
+            Borrar Persona => ok        
+
+Libro
+    POST LIBRO
+        Manejo de errores.
+            Falta datos => ok
+            Nombre Repetido => ok
+            Categoria Inexistente => ok
+--------    Persona Inexistente => no toma null como valido al momento de ingresar los datos por JSON.
+
+        Carga de Datos:
+            Carga de datos => ok
+    
+    GET LIBRO
+        Manejo de errores.
+--------    Tabla vacia => captura el error en el catch, no lo captura en if-throw new Error.
+
+        Obtener Datos.
+            Obtener datos => ok 
+
+    GET LIBRO x id
+        Manejo de errores.
+--------    Falta Datos => No se como validar que si no se envia el id en la consulta, porque si lo dejo vacio, lo toma como una consulta de todos los libros. 
+            Libro Inexistente => ok
+
+        Obtener Datos.
+            Obtener datos => ok 
+
+    PUT LIBRO X ID 
+        Manejo de errores.
+            Faltan datos => ok
+            Libro Inexistente => ok
+            Modificacion solo categoria => ok (Falta una comparacion toUpperCase())
+
+            Modificacion de Datos:
+            Modificacion de datos => ok
+
+    PUT LIBRO PRESTAR X ID
+        Manejo de errores
+            Faltan datos => ok
+            Libro Inexistente => ok
+            Persona Inexistente => ok
+            Libro prestado => ok
+
+            Modificación de datos:
+                Modificacion de Persona_id => ok
+
+    PUT LIBRO DEVOLVER X ID
+        Manejo de errores
+            Faltan datos => ok
+            Libro Inexistente => ok
+            Libro no prestado => ok
+
+            Modificación de datos:
+                Modificacion de Persona_id => ok
+
+    DELETE LIBRO X ID
+        Manejo de errores.
+--------    Faltan datos => No puedo verificarlo, me tira error: 
+            Cannot DELETE /libro
+            Libro Inexistente => ok 
+            Libro prestado => ok
+
+        Borrar datos.
+            Borrar libro => ok        
+

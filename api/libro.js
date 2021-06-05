@@ -164,7 +164,7 @@ router.put('/:id', async(req, res) => {
         // valido que no quiera modificar otros datos
         const libro = respuestaLibro[0];
         if (
-            libro.nombre !== req.body.nombre ||
+            libro.nombre !== req.body.nombre.toUpperCase() ||
             libro.categoria_id !== req.body.categoria_id ||
             libro.persona_id != req.body.persona_id
         ) {

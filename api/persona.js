@@ -81,8 +81,10 @@ router.get('/', async(req, res) => {
         const query = 'SELECT * FROM persona';
 
         const respuesta = await qy(query);
+
+        //Verifico si hay personas
         if (respuesta.length <= 0) {
-            throw new Error('Error');
+            throw new Error('No hay personas registradas');
         }
         res.status(200).send(respuesta);
     } catch (e) {
@@ -186,9 +188,9 @@ router.delete('/:id', async(req, res) => {
         }
 
         ///Valido libros asociados
-        const queryLibroId = 'SELECT * FROM libro WHERE id_persona = ?';
+        const queryLibroId = 'SELECT * FROM libro WHERE persona_id = ?';
         const respuestaLibroId = await qy(queryLibroId, [req.params.id]);
-        if (respuestaLibroId > 0) {
+        if (respuestaLibroId.length > 0) {
             res
                 .status(413)
                 .send({
@@ -208,7 +210,7 @@ router.delete('/:id', async(req, res) => {
         }
     } catch (e) {
         console.error(e.message);
-        res.status(413).send({ mensaje: 'Error inesperado' });
+        res.status(413).send({ mensaje: 'Error inesperado en el catch.' });
     }
 });
 
