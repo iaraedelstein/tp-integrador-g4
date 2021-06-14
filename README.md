@@ -12,5 +12,5 @@ Tp Integrador Grupo 4
 - Jorge Rivera
 - Guillermo Dorfman
 - Mauro Lopez
-- Joel Nicolas
+- Joel Nicolás Sartori
 - Lihuen
