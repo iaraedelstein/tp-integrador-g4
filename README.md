@@ -2,10 +2,6 @@
 
 Tp Integrador Grupo 4
 
-## Consigna
-
-## Endpoints API
-
 ## Integrantes
 
 - Iara Edelstein
@@ -13,4 +9,4 @@ Tp Integrador Grupo 4
 - Guillermo Dorfman
 - Mauro Lopez
 - Joel Nicolás Sartori
-- Lihuen
+- Lihuen Salerno

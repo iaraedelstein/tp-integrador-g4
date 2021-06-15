@@ -91,8 +91,8 @@ module.exports = {
         throw new Error('Faltan datos');
       }
       const idLibro = req.params.id;
-      const persona_id = req.body.persona_id;
-      await prestarLibro(persona_id, idLibro);
+      const idPersona = req.body.persona_id;
+      await prestarLibro(idPersona, idLibro);
       res.status(200).send({ mensaje: 'se presto correctamente' });
     } catch (e) {
       console.error(e.message);
