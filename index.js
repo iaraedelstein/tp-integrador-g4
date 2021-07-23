@@ -17,7 +17,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 //Cors seguridad para origen de requests
-app.use(cors({ origin: 'http:/localhost:4200', credentials: true }));
+app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
 
 // Desarrollo APIS lógica de negocio
 app.use('/categoria', categoriaRouter);
