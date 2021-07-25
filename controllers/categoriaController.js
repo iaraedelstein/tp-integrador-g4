@@ -2,7 +2,9 @@ const {
   createCategory,
   getCategories,
   getCategoryById,
+  updateCategory,
   deteleteCategory,
+  getLibrosByCategoryId,
 } = require('../services/categoriaService');
 
 module.exports = {
@@ -39,6 +41,36 @@ module.exports = {
     } catch (e) {
       console.error(e.message);
       res.status(413).send({ mensaje: 'error inesperado' });
+    }
+  },
+  getLibrosByCategory: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        throw new Error('Faltan datos');
+      }
+      const id = req.params.id;
+      const libros = getLibrosByCategoryId(id);
+      res.status(200).send(libros);
+    } catch (e) {
+      console.error(e.message);
+      res.status(413).send({ mensaje: 'error inesperado' });
+    }
+  },
+  updateCategory: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        throw new Error('Faltan datos');
+      }
+      if (!req.body.nombre || req.body.nombre === '') {
+        throw new Error('Faltan datos');
+      }
+      const id = req.params.id;
+      const nombre = req.body.nombre;
+      await updateCategory(id, nombre);
+      res.status(200).send({ mensaje: 'Se actualizó correctamente' });
+    } catch (e) {
+      console.error(e.message);
+      res.status(413).send({ mensaje: e.message });
     }
   },
   deteleteCategory: async (req, res) => {
