@@ -34,7 +34,7 @@ module.exports = {
     if (respuesta.length > 0) {
       throw new Error('Ese nombre de categoria: ' + nombre + ' ya existe.');
     }
-    const id = await updateCategory(id, nombre);
+    await updateCategory(id, nombre);
     const catergory = {
       id,
       nombre,
