@@ -9,6 +9,8 @@ const categoriaController = require('../controllers/categoriaController');
  * GET      /categoría          obtener todas las categorías
  * GET      /categoria/:id      obtener una categorías
  * DELETE   /categoria/:id      eliminar categoría
+ * PUT      /categoria/:id      update categoría
+ * GET      /categoria/:id/libros  get libros por categoría
  *
  * Path -> /categoria
  */
@@ -40,5 +42,18 @@ DELETE '/categoria/:id' retorna:
 - status: 413, {mensaje: <descripcion del error>} que puese ser: "error inesperado", "categoria con libros asociados, no se puede eliminar", "no existe la categoria indicada"
 */
 router.delete('/:id', categoriaController.deteleteCategory);
+
+/* PUT '/categoria/:id' recibe: {nombre: string} retorna: 
+- status: 200, {id: numerico, nombre: string} 
+- status: 413, {mensaje: <descripcion del error>} que puede ser: "faltan datos", "ese nombre de categoria ya existe", "error inesperado"
+*/
+router.put('/:id', categoriaController.updateCategory);
+
+/*
+GET '/categoria/:id/libros' retorna: 
+- status 200 y listado de libros
+- status: 413
+*/
+router.get('/:id/libros', categoriaController.getLibrosByCategory);
 
 module.exports = router;

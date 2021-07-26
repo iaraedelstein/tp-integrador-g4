@@ -12,6 +12,13 @@ module.exports = {
     ]);
     return result.insertId;
   },
+  updateCategory: async (id, nombre) => {
+    const result = await qy('UPDATE categoria SET nombre=? WHERE id=?', [
+      nombre,
+      id,
+    ]);
+    return result.affectedRows;
+  },
   getCategories: async () => {
     const query = 'SELECT * FROM categoria';
     const categories = await qy(query);

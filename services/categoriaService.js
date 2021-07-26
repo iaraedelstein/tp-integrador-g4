@@ -4,6 +4,7 @@ const {
   getCategories,
   getCategoryById,
   deleteCategory,
+  updateCategory,
 } = require('../models/categoria');
 
 const { getLibroByCategory } = require('../models/libro');
@@ -16,6 +17,24 @@ module.exports = {
       throw new Error('Ese nombre de categoria: ' + nombre + ' ya existe.');
     }
     const id = await insertCategory(nombre);
+    const catergory = {
+      id,
+      nombre,
+    };
+    return catergory;
+  },
+  updateCategory: async (id, nombre) => {
+    //valido si existe la categoria
+    const respuestaGet = await getCategoryById(id);
+    if (respuestaGet.length <= 0) {
+      throw new Error('No existe la categoria indicada');
+    }
+    //verifico que no se repita la categoria
+    const respuesta = await getCategoryByName(nombre);
+    if (respuesta.length > 0) {
+      throw new Error('Ese nombre de categoria: ' + nombre + ' ya existe.');
+    }
+    await updateCategory(id, nombre);
     const catergory = {
       id,
       nombre,
@@ -36,6 +55,16 @@ module.exports = {
       throw new Error('Categoria no encontrada');
     }
     return respuesta[0];
+  },
+  getLibrosByCategoryId: async (id) => {
+    //valido si existe la categoria
+    const respuestaGet = await getCategoryById(id);
+    if (respuestaGet.length <= 0) {
+      throw new Error('No existe la categoria indicada');
+    }
+    //Valido si hay libros asociados a la categoria
+    const responseGetLibros = await getLibroByCategory(id);
+    return responseGetLibros;
   },
   deteleteCategory: async (id) => {
     //valido si existe la categoria
