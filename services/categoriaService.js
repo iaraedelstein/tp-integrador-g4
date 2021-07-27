@@ -58,12 +58,12 @@ module.exports = {
   },
   getLibrosByCategoryId: async (id) => {
     //valido si existe la categoria
-    const respuestaGet = await getCategoryById(id);
-    if (respuestaGet.length <= 0) {
+    const category = await getCategoryById(id);
+    if (category.length <= 0) {
       throw new Error('No existe la categoria indicada');
     }
     //Valido si hay libros asociados a la categoria
-    const responseGetLibros = await getLibroByCategory(id);
+    const responseGetLibros = await getLibroByCategory(category[0].id);
     return responseGetLibros;
   },
   deteleteCategory: async (id) => {

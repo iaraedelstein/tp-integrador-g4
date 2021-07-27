@@ -24,9 +24,9 @@ module.exports = {
     const query = 'SELECT * FROM libro WHERE nombre = ?';
     return await qy(query, [name]);
   },
-  getLibroByCategory: async (idCat) => {
+  getLibroByCategory: async (id) => {
     const query = 'SELECT * FROM libro WHERE categoria_id = ?';
-    return await qy(query, [idCat]);
+    return await qy(query, [id]);
   },
   getLibroByPersonaId: async (persona_id) => {
     const query = 'SELECT * FROM libro WHERE persona_id = ?';
