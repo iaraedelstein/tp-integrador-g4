@@ -30,7 +30,7 @@ module.exports = {
     return categories;
   },
   deleteCategory: async (id) => {
-    const query = 'DELETE FROM persona WHERE id = ?';
+    const query = 'DELETE FROM categoria WHERE id = ?';
     const result = await qy(query, [id]);
     return result.affectedRows;
   },
