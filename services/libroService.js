@@ -2,6 +2,7 @@ const {
   insertLibro,
   getLibros,
   getLibroById,
+  getLibroByPersonaId,
   getLibroByName,
   updateLibroDescription,
   updateLibroPersona,
@@ -47,10 +48,22 @@ module.exports = {
   getLibroById: async (id) => {
     const respuesta = await getLibroById(id);
     if (respuesta.length <= 0) {
-      throw new Error('No se encuentra ese libro');
+      throw new Error('No se encuentra ese libro.');
     }
     return respuesta[0];
   },
+
+  //OBTENER LIBRO POR ID PERSONA
+  getLibroByPersonaId: async (id) => {
+    
+    const respuesta = await getLibroByPersonaId(id);
+    if (respuesta.length <= 0) {
+      throw new Error('Esa persona no existe o no tiene libros prestados.');
+    }
+    return respuesta[0];
+  },
+
+//------------------
   updateLibro: async (libro) => {
     //valido si existe el libro
 
