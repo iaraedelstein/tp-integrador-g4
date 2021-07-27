@@ -36,7 +36,7 @@ module.exports = {
         throw new Error('Faltan datos');
       }
       const id = req.params.id;
-      const category = getCategoryById(id);
+      const category = await getCategoryById(id);
       res.status(200).send(category);
     } catch (e) {
       console.error(e.message);
