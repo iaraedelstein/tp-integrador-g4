@@ -60,23 +60,19 @@ module.exports = {
     }
   },
 
-//OBTENER LIBRO POR ID-PERSONA
-
-getLibroByPersonaId: async (req, res) => {
-  try {
-    if (!req.params.id) {
-      throw new Error('Faltan datos');
+  getLibroByPersonaId: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        throw new Error('Faltan datos');
+      }
+      const id = req.params.id;
+      const libro = await getLibroByPersonaId(id);
+      res.status(200).send(libro);
+    } catch (e) {
+      console.error(e.message);
+      res.status(413).send({ mensaje: e.message });
     }
-    const id = req.params.id;
-    const libro = await getLibroByPersonaId(id);
-    res.status(200).send(libro);
-  } catch (e) {
-    console.error(e.message);
-    res.status(413).send({ mensaje: e.message });
-  }
-},
-
-//----------------------------------------
+  },
 
   updateLibro: async (req, res) => {
     try {

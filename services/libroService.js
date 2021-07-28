@@ -53,17 +53,14 @@ module.exports = {
     return respuesta[0];
   },
 
-  //OBTENER LIBRO POR ID PERSONA
   getLibroByPersonaId: async (id) => {
-    
     const respuesta = await getLibroByPersonaId(id);
     if (respuesta.length <= 0) {
       throw new Error('Esa persona no existe o no tiene libros prestados.');
     }
-    return respuesta[0];
+    return respuesta;
   },
 
-//------------------
   updateLibro: async (libro) => {
     //valido si existe el libro
 

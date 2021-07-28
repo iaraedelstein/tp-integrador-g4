@@ -32,8 +32,6 @@ router.get('/:id', libroController.getLibroById);
 
 router.get('/libropersona/:id', libroController.getLibroByPersonaId);
 
-//------------------------------------------
-
 /*
  * PUT '/libro/:id'
  * {id: numero, nombre:string, descripcion:string, categoria_id:numero, persona_id:numero/null}

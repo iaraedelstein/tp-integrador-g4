@@ -21,13 +21,10 @@ module.exports = {
     return await qy(query, [id]);
   },
 
-  //OBTENER LIBRO POR ID_PERSONA
   getLibroByPersonaId: async (id) => {
     const query = 'SELECT * FROM libro WHERE persona_id = ?';
     return await qy(query, [id]);
   },
-
-//--------------------------------------------
 
   getLibroByName: async (name) => {
     const query = 'SELECT * FROM libro WHERE nombre = ?';
