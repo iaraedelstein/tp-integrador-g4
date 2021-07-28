@@ -2,6 +2,7 @@ const {
   insertLibro,
   getLibros,
   getLibroById,
+  getLibroByPersonaId,
   updateLibro,
   prestarLibro,
   devolverLibro,
@@ -58,6 +59,21 @@ module.exports = {
       res.status(413).send({ mensaje: e.message });
     }
   },
+
+  getLibroByPersonaId: async (req, res) => {
+    try {
+      if (!req.params.id) {
+        throw new Error('Faltan datos');
+      }
+      const id = req.params.id;
+      const libro = await getLibroByPersonaId(id);
+      res.status(200).send(libro);
+    } catch (e) {
+      console.error(e.message);
+      res.status(413).send({ mensaje: e.message });
+    }
+  },
+
   updateLibro: async (req, res) => {
     try {
       //valido la info recibida

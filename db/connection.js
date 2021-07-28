@@ -7,7 +7,7 @@ const conn = mysql.createConnection(settings);
 
 conn.connect((error) => {
   if (error) throw error;
-  console.log('Se estableció la conexión con la DB');
+  console.log('Se estableció una conexión con la DB');
 });
 
 // Permite el uso de async await para un código más ordenado al generar queries
