@@ -25,12 +25,13 @@ module.exports = {
         'No existe la categoria indicada: ' + libro.categoria_id + '.'
       );
     }
-    // validar que exista la persona indicada.
-    const respuestaPersona = await getPersonaById(libro.persona_id);
-    if (respuestaPersona.length <= 0) {
-      throw new Error(
-        'No existe la persona indicada: ' + libro.persona_id + '.'
-      );
+    if (libro.persona_id) {
+      const respuestaPersona = await getPersonaById(libro.persona_id);
+      if (respuestaPersona.length <= 0) {
+        throw new Error(
+          'No existe la persona indicada: ' + libro.persona_id + '.'
+        );
+      }
     }
     //Ingreso el libro a la base de datos.
     const insertId = await insertLibro(libro);
